@@ -58,6 +58,14 @@
   --color-heading: #1a202c;
   --color-heading-black: black;
   --color-accent: #d1dce5;
+  --color-background: white;
+}
+
+:root.dark {
+  --color-text: #DDD;
+  --color-text-light: #D1D1D1;
+  --color-primary: #0F9640;
+  --color-background: black;
 }
 
 /* HTML elements */
@@ -79,6 +87,7 @@ body {
   font-family: var(--font-body);
   font-size: var(--fontSize-1);
   color: var(--color-text);
+  background-color: var(--color-background);
 }
 
 footer {
