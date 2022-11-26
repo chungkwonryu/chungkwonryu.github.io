@@ -16,7 +16,7 @@ const Post = ({ postNode, config, slug }) => {
 
   return (
     <div>
-      <div className="py-6">
+      <div className="py-2">
         <PostDate date={post.date} />
         <PostShare postPath={slug} postNode={postNode} />
       </div>

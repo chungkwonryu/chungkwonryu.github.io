@@ -13,7 +13,7 @@ const PostCategories = ({
       to={getCategoryPath(category)}
       label={category}
     >
-      <span className="uppercase">
+      <span className="uppercase text-sky-500 hover:text-sky-700">
         {category}
       </span>
     </Link>

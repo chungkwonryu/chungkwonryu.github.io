@@ -10,7 +10,7 @@ const PostTags = ({ tags, iconColor = "#444" }) => {
       to={getTagPath(tag)}
       label={tag}
     >
-      <span className="uppercase text-sky-500">
+      <span className="uppercase text-sky-500 hover:text-sky-700">
         {tag}
       </span>
     </Link>
