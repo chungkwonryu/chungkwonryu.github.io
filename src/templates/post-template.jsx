@@ -5,6 +5,7 @@ import Layout from "../layout";
 import Header from "../components/Header/Header";
 import MainContainer from "../components/MainContainer/MainContainer";
 import Post from "../components/Post/Post";
+import SEO from "../components/SEO/SEO";
 import config from "../../data/SiteConfig";
 
 const PostTemplate = ({ data, pageContext }) => {
@@ -18,6 +19,7 @@ const PostTemplate = ({ data, pageContext }) => {
       <Helmet>
         <title>{`${title} - ${config.siteTitle}`}</title>
       </Helmet>
+      <SEO postPath={slug} postNode={postNode} postSEO />
       <Header title={title} />
       <MainContainer content={content} />
     </Layout>
