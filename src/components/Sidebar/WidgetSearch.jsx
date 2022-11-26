@@ -20,7 +20,7 @@ class WidgetSearch extends Component {
                       </svg>
                     </button>
                   </span>
-                  <input type="search" name="q" class="py-2 text-sm rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900" placeholder="Search..." autocomplete="off" />
+                  <input type="search" name="q" class="py-2 text-sm rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900" placeholder="Search..." autoComplete="off" />
                 </div>
               </form>
             </div>

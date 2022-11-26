@@ -11,16 +11,15 @@ const WidgetLatesPosts = ({ latestPostEdges }) => {
   return (
     <WidgetContainer>
       <WidgetTitle title={config.latestPostsWidgetTitle} />
-      <div>
+      <div className="divide-y divide-slate-300">
         {postList.map((post) => (
-          <Link
-            key={post.title}
-            to={post.slug}
-          >
-            <span className="block border-b-2 border-b-gray-400 py-4">
-              {post.title}
+          <div key={post.title}>
+            <span className="block py-2 text-sky-500 hover:text-sky-700">
+              <Link to={post.slug}>
+                {post.title}
+              </Link>
             </span>
-          </Link>
+          </div>
         ))}
       </div>
     </WidgetContainer>
