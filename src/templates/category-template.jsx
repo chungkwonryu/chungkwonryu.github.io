@@ -2,29 +2,39 @@ import React from "react";
 import Helmet from "react-helmet";
 import { graphql } from "gatsby";
 import Layout from "../layout";
+import Header from "../components/Header/Header";
 import MainContainer from "../components/MainContainer/MainContainer";
 import Sidebar from "../components/Sidebar/Sidebar";
 import PostListing from "../components/PostListing/PostListing";
 import Pagination from "../components/Pagination/Pagination";
-import { getPostList } from "../utils/helpers";
+import {
+  getPostList,
+  getCategoryPathWithoutTrailingSlash,
+} from "../utils/helpers";
 import config from "../../data/SiteConfig";
 
-const BlogTemplate = ({ data, pageContext }) => {
-  const { categoryList, tagList, latestPostEdges, currentPage, totalPages } =
-    pageContext;
+const CategoryTemplate = ({ data, pageContext }) => {
+  const {
+    category,
+    categoryList,
+    tagList,
+    latestPostEdges,
+    currentPage,
+    totalPages,
+  } = pageContext;
   const postEdges = data.allMarkdownRemark.edges;
   const postList = getPostList(postEdges);
   const content = (
     <>
       <PostListing
         postList={postList}
-        hasThumbnail={config.blogHasThumbnail}
+        hasThumbnail={config.categoryHasThumbnail}
         hasLoadmore={false}
       />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        pathPrefix={config.pathPrefixBlog}
+        pathPrefix={getCategoryPathWithoutTrailingSlash(category)}
         pathPrefixPagination={config.pathPrefixPagination}
       />
     </>
@@ -40,24 +50,32 @@ const BlogTemplate = ({ data, pageContext }) => {
 
   return (
     <Layout>
-      <div className="blog-container">
-        <Helmet title={`${config.blogHeader} - ${config.siteTitle}`} />
+      <div className="category-container">
+        <Helmet
+          title={`${config.categoryHeader} ${category} - ${config.siteTitle}`}
+        />
+        <Header title={`${config.categoryHeader} ${category}`} />
         <MainContainer content={content} sidebar={sidebar} />
       </div>
     </Layout>
   );
 };
 
-export default BlogTemplate;
+export default CategoryTemplate;
 
 /* eslint no-undef: "off" */
 export const pageQuery = graphql`
-  query BlogPage($skip: Int!, $limit: Int!) {
+  query CategoryPage($category: String, $skip: Int!, $limit: Int!) {
     allMarkdownRemark(
       limit: $limit
       skip: $skip
       sort: { frontmatter: { date: DESC } }
-      filter: { frontmatter: { template: { eq: "post" } } }
+      filter: {
+        frontmatter: {
+          categories: { in: [$category] }
+          template: { eq: "post" }
+        }
+      }
     ) {
       totalCount
       edges {
@@ -71,7 +89,6 @@ export const pageQuery = graphql`
           frontmatter {
             title
             tags
-            categories
             cover {
               childImageSharp {
                 gatsbyImageData(width: 660, quality: 100, layout: CONSTRAINED)

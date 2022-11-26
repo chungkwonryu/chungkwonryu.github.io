@@ -4,6 +4,8 @@ import { graphql, Link } from "gatsby";
 import Layout from "../layout";
 import Header from "../components/Header/Header";
 import MainContainer from "../components/MainContainer/MainContainer";
+import Sidebar from "../components/Sidebar/Sidebar";
+import SEO from "../components/SEO/SEO";
 import PostListing from "../components/PostListing/PostListing";
 import { getPostList, getTagCategoryList } from "../utils/helpers";
 import config from "../../data/SiteConfig";
@@ -12,7 +14,7 @@ class Index extends React.Component {
   render() {
     const postEdges = this.props.data.allMarkdownRemark.edges;
     const postList = getPostList(postEdges);
-    const { tagList } = getTagCategoryList(postList);
+    const { tagList, categoryList } = getTagCategoryList(postList);
 
     const content = (
       <>
@@ -35,6 +37,14 @@ class Index extends React.Component {
       </>
     );
 
+    const sidebar = (
+      <Sidebar
+        tagList={tagList}
+        categoryList={categoryList}
+        links={config.sidebarLinks}
+      />
+    );
+
     const headerTitle = config.homeHeader
       ? `${config.siteTitle} - ${config.homeHeader}`
       : `${config.siteTitle}`;
@@ -43,8 +53,9 @@ class Index extends React.Component {
       <Layout>
         <div>
           <Helmet title={config.siteTitle} />
+          <SEO />
           <Header title={headerTitle} />
-          <MainContainer content={content} />
+          <MainContainer content={content} sidebar={sidebar} />
         </div>
       </Layout>
     );
@@ -71,6 +82,7 @@ export const indexQuery = graphql`
           frontmatter {
             title
             tags
+            categories
             date
             cover {
               childImageSharp {
