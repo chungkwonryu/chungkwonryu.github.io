@@ -8,12 +8,12 @@ const WidgetLinks = ({ links }) => (
     {links && links.length > 0 && (
       <WidgetContainer>
         <WidgetTitle title={config.linksWidgetTitle} />
-        <div>
+        <div className="divide-y divide-slate-300">
           {links.map((link) => (
             <a
               key={link.label}
               href={link.url}
-              className="block border-b-2 border-b-gray-400 py-4"
+              className="block py-2 text-sky-500 hover:text-sky-700"
             >
               {link.label}
             </a>

@@ -14,6 +14,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@tailwindcss/forms": "^0.5.3",
     "gatsby": "^5.1.0",
     "gatsby-plugin-catch-links": "^5.1.0",
     "gatsby-plugin-feed": "^5.1.0",

@@ -49,7 +49,7 @@ class ScrollToTop extends React.Component {
       <div
         ref={this.rootRef}
         onClick={this.handleClick}
-        className="z-50 leading-none bg-gray-300 p-4 block rounded-xl fixed bottom-6 right-6 cursor-pointer ease-in-out duration-300"
+        className="z-50 leading-none bg-gray-400 p-4 block rounded-xl fixed bottom-6 right-6 cursor-pointer ease-in-out duration-300"
       >
         <FontAwesomeIcon icon={["fas", "angle-up"]} style={{ color }} />
       </div>

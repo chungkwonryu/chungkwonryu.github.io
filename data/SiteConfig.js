@@ -155,7 +155,7 @@ const config = {
     { label: "Privacy Policy", url: "/privacy" },
   ],
   copyright:
-    "Copyright © 2019-2022 Chungkwon Ryu. Using Lam Pham's gb-template.",
+    "Copyright © 2022-2022 Chungkwon Ryu. Using Lam Pham's gb-template.",
   // Use for manifest
   themeColor: "#2196F3", // Used for setting manifest and progress theme colors.
   backgroundColor: "#FFF", // Used for setting manifest background color.

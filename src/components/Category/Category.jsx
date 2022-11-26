@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "gatsby";
-import { getTagPath } from "../../utils/helpers";
+import { getCategoryPath } from "../../utils/helpers";
 
-const Tag = ({ content }) => (
+const Category = ({ content }) => (
   <Link
     key={content}
-    to={getTagPath(content)}
+    to={getCategoryPath(content)}
   >
     <span className="text-sky-500 hover:text-sky-700 text-center mr-2 mb-2 border border-gray-300 inline-block px-3 py-1">
       {content}
@@ -13,4 +13,4 @@ const Tag = ({ content }) => (
   </Link>
 );
 
-export default Tag;
+export default Category;

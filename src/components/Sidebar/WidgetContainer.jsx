@@ -1,7 +1,7 @@
 import React from "react";
 
 const WidgetContainer = ({ children }) => (
-  <aside className="py-8">
+  <aside className="py-6">
     {children}
   </aside>
 );

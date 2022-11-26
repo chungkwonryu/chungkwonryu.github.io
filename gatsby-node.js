@@ -70,6 +70,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const postPageTemplate = path.resolve("src/templates/post-template.jsx");
   const pagePageTemplate = path.resolve("src/templates/page-template.jsx");
   const tagPageTemplate = path.resolve("src/templates/tag-template.jsx");
+  const categoryPageTemplate = path.resolve("src/templates/category-template.jsx");
   const blogPageTemplate = path.resolve("src/templates/blog-template.jsx");
 
   const markdownQueryResult = await graphql(
@@ -85,6 +86,7 @@ exports.createPages = async ({ graphql, actions }) => {
                 template
                 title
                 tags
+                categories
                 date
               }
             }
@@ -101,6 +103,7 @@ exports.createPages = async ({ graphql, actions }) => {
 
   // Filter data
   const tagSet = new Set();
+  const categorySet = new Set();
   const postEdges = [];
   const pageEdges = [];
 
@@ -108,6 +111,12 @@ exports.createPages = async ({ graphql, actions }) => {
     if (edge.node.frontmatter.tags) {
       edge.node.frontmatter.tags.forEach((tag) => {
         tagSet.add(tag);
+      });
+    }
+
+    if (edge.node.frontmatter.categories) {
+      edge.node.frontmatter.categories.forEach((category) => {
+        categorySet.add(category);
       });
     }
 
@@ -120,8 +129,9 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   });
 
-  // Create tagList
+  // Create tagList, categoryList
   const tagList = Array.from(tagSet);
+  const categoryList = Array.from(categorySet);
 
   // Get latest posts
   const latestPostEdges = [];
@@ -148,6 +158,7 @@ exports.createPages = async ({ graphql, actions }) => {
         prevtitle: prevEdge.node.frontmatter.title,
         prevslug: prevEdge.node.fields.slug,
         tagList,
+        categoryList,
         latestPostEdges,
       },
     });
@@ -161,6 +172,7 @@ exports.createPages = async ({ graphql, actions }) => {
       context: {
         slug: edge.node.fields.slug,
         tagList,
+        categoryList,
         latestPostEdges,
       },
     });
@@ -191,11 +203,44 @@ exports.createPages = async ({ graphql, actions }) => {
         context: {
           tag,
           tagList,
+          categoryList,
           latestPostEdges,
           limit: postsPerPage,
           skip: i * postsPerPage,
           currentPage: i + 1,
           totalPages: numTagPages,
+        },
+      });
+    }
+  });
+
+  // create category page
+  categoryList.forEach((category) => {
+    const categoryPosts = postEdges.filter((edge) => {
+      const categories = edge.node.frontmatter.categories;
+      return categories && categories.includes(category);
+    });
+
+    const numCategoryPages = Math.ceil(categoryPosts.length / postsPerPage);
+    const basePath = `${siteConfig.pathPrefixCategory}/${slugify(category)}`;
+
+    for (let i = 0; i < numCategoryPages; i++) {
+      createPage({
+        path: useSlash(
+          i === 0
+            ? `${basePath}`
+            : `${basePath}${pathPrefixPagination}/${i + 1}`
+        ),
+        component: categoryPageTemplate,
+        context: {
+          category,
+          tagList,
+          categoryList,
+          latestPostEdges,
+          limit: postsPerPage,
+          skip: i * postsPerPage,
+          currentPage: i + 1,
+          totalPages: numCategoryPages,
         },
       });
     }
@@ -216,6 +261,7 @@ exports.createPages = async ({ graphql, actions }) => {
         component: blogPageTemplate,
         context: {
           tagList,
+          categoryList,
           latestPostEdges,
           limit: postsPerPage,
           skip: i * postsPerPage,
