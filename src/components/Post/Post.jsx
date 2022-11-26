@@ -4,7 +4,6 @@ import PostDivider from "./PostDivider";
 import PostTags from "./PostTags";
 import PostShare from "./PostShare";
 import PostCategories from "./PostCategories";
-import "../../../content/styles/code-highlight.scss";
 
 const Post = ({ postNode, config, slug }) => {
   const post = postNode.frontmatter;

@@ -5,7 +5,7 @@ import { Link } from "gatsby";
 const PostInfo = ({ post }) => (
   <div className="mt-4">
     <Link to={post.slug} key={post.title} >
-      <h2 className="text-2xl font-bold mb-2 text-sky-500 hover:text-sky-700">
+      <h2 className="text-3xl font-bold mb-2 text-sky-500 hover:text-sky-700">
         <small>{post.title}</small>
       </h2>
     </Link>

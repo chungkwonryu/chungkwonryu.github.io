@@ -1,8 +1,8 @@
 const config = {
   // Site info
-  siteTitle: "Chungkwon's devlog", // site title
+  siteTitle: "개발로그", // site title
   siteTitleShort: "CK Devlog", // short site title for homescreen (under 12 char)
-  siteTitleAlt: "Chungkwon's devlog", // Alternative site title for SEO
+  siteTitleAlt: "Chungkwon's Devlog", // Alternative site title for SEO
   siteLogo: "/logos/logo-1024x1024.png", // Logo used for SEO and manifest
   siteUrl: "https://chungkwonryu.github.io", // Domain of you
   pathPrefix: "", // Prefixes all links. For cases when deployed to example.github.io/gatsby-advanced-starter/.
