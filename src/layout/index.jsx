@@ -6,6 +6,7 @@ import siteConfig from "../../data/SiteConfig";
 import { useSlash } from "../utils/helpers";
 import brand from "../../content/images/brand.png";
 import "../components/Icons/FontAwesome";
+import ScrollToTop from "../components/ScrollToTop/ScrollToTop";
 
 const MainLayout = ({ children, hasFooter = true }) => (
   <div>
@@ -27,6 +28,7 @@ const MainLayout = ({ children, hasFooter = true }) => (
         copyright={siteConfig.copyright}
       />
     )}
+    <ScrollToTop color="#FFF" />
   </div>
 );
 

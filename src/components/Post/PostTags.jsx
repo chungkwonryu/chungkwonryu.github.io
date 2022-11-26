@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "gatsby";
 import { getTagPath } from "../../utils/helpers";
 import config from "../../../data/SiteConfig";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

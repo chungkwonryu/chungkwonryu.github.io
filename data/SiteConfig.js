@@ -153,7 +153,6 @@ const config = {
     { label: "Contact", url: "/contact" },
     { label: "Terms of Use", url: "/terms" },
     { label: "Privacy Policy", url: "/privacy" },
-    { label: "Sitemap", url: "https://gb-template.netlify.com/sitemap.xml" },
   ],
   copyright:
     "Copyright © 2019-2022 Chungkwon Ryu. Using Lam Pham's gb-template.",
