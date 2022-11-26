@@ -1,94 +1,85 @@
-import * as React from "react"
-import { Link, graphql } from "gatsby"
+import React from "react";
+import Helmet from "react-helmet";
+import { graphql, Link } from "gatsby";
+import Layout from "../layout";
+import Header from "../components/Header/Header";
+import MainContainer from "../components/MainContainer/MainContainer";
+import PostListing from "../components/PostListing/PostListing";
+import { getPostList, getTagCategoryList } from "../utils/helpers";
+import config from "../../data/SiteConfig";
 
-import Bio from "../components/bio"
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+class Index extends React.Component {
+  render() {
+    const postEdges = this.props.data.allMarkdownRemark.edges;
+    const postList = getPostList(postEdges);
+    const { tagList } = getTagCategoryList(postList);
 
-const BlogIndex = ({ data, location }) => {
-  const siteTitle = data.site.siteMetadata?.title || `Title`
-  const posts = data.allMarkdownRemark.nodes
+    const content = (
+      <>
+        <PostListing
+          postList={postList}
+          hasThumbnail={config.homeHasThumbnail}
+          hasLoadmore={config.homeHasLoadmore}
+          postsPerPage={config.postsPerPage}
+          numberLoadmore={config.numberLoadmore}
+          btnLoadmore={config.btnLoadmore}
+          forcePostsPerPage={config.homeHasLoadmore == false}
+        />
+        {!config.homeHasLoadmore && postList.length > config.postsPerPage && (
+          <div>
+            <Link to={`${config.pathPrefixBlog}${config.pathPrefixPagination}/2`} >
+              {config.homeMoreArticles}
+            </Link>
+          </div>
+        )}
+      </>
+    );
 
-  if (posts.length === 0) {
+    const headerTitle = config.homeHeader
+      ? `${config.siteTitle} - ${config.homeHeader}`
+      : `${config.siteTitle}`;
+    
     return (
-      <Layout location={location} title={siteTitle}>
-        <Bio />
-        <p>
-          No blog posts found. Add markdown posts to "content/blog" (or the
-          directory you specified for the "gatsby-source-filesystem" plugin in
-          gatsby-config.js).
-        </p>
+      <Layout>
+        <div>
+          <Helmet title={config.siteTitle} />
+          <Header title={headerTitle} />
+          <MainContainer content={content} />
+        </div>
       </Layout>
-    )
+    );
   }
-
-  return (
-    <Layout location={location} title={siteTitle}>
-      <Bio />
-      <ol style={{ listStyle: `none` }}>
-        {posts.map(post => {
-          const title = post.frontmatter.title || post.fields.slug
-
-          return (
-            <li key={post.fields.slug}>
-              <article
-                className="post-list-item"
-                itemScope
-                itemType="http://schema.org/Article"
-              >
-                <header>
-                  <h2>
-                    <Link to={post.fields.slug} itemProp="url">
-                      <span itemProp="headline">{title}</span>
-                    </Link>
-                  </h2>
-                  <small>{post.frontmatter.date}</small>
-                </header>
-                <section>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: post.frontmatter.description || post.excerpt,
-                    }}
-                    itemProp="description"
-                  />
-                </section>
-              </article>
-            </li>
-          )
-        })}
-      </ol>
-    </Layout>
-  )
 }
 
-export default BlogIndex
+export default Index;
 
-/**
- * Head export to define metadata for the page
- *
- * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
- */
-export const Head = () => <Seo title="All posts" />
-
-export const pageQuery = graphql`
-  {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-    allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
-      nodes {
-        excerpt
-        fields {
-          slug
-        }
-        frontmatter {
-          date(formatString: "MMMM DD, YYYY")
-          title
-          description
+export const indexQuery = graphql`
+  query IndexQuery {
+    allMarkdownRemark(
+      limit: 2000
+      sort: { frontmatter: { date: DESC } }
+      filter: { frontmatter: { template: { eq: "post" } } }
+    ) {
+      edges {
+        node {
+          fields {
+            slug
+            date
+          }
+          excerpt
+          timeToRead
+          frontmatter {
+            title
+            tags
+            date
+            cover {
+              childImageSharp {
+                gatsbyImageData(width: 660, quality: 100, layout: CONSTRAINED)
+              }
+            }
+          }
         }
       }
     }
   }
-`
+`;

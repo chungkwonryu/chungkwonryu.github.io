@@ -5,121 +5,224 @@
  */
 
 const path = require(`path`)
+const slug = require("slug");
+const moment = require("moment");
+const siteConfig = require("./data/SiteConfig");
+
 const { createFilePath } = require(`gatsby-source-filesystem`)
 
-// Define the template for blog post
-const blogPost = path.resolve(`./src/templates/blog-post.js`)
+// src/utils/helpers.js랑 겹치지만,
+// gatsby-node.js에서 해당 파일들을 require해오면
+// ESM vs CommonJS 문제로 인해서 빌드 실패한다.
+const useSlash = (slug) => {
+  if (!slug) return "/";
+  if (slug.charAt(slug.length - 1) !== "/") return `${slug}/`;
+  return slug;
+};
 
-/**
- * @type {import('gatsby').GatsbyNode['createPages']}
- */
-exports.createPages = async ({ graphql, actions, reporter }) => {
-  const { createPage } = actions
-
-  // Get all markdown blog posts sorted by date
-  const result = await graphql(`
-    {
-      allMarkdownRemark(sort: { frontmatter: { date: ASC } }, limit: 1000) {
-        nodes {
-          id
-          fields {
-            slug
-          }
-        }
-      }
-    }
-  `)
-
-  if (result.errors) {
-    reporter.panicOnBuild(
-      `There was an error loading your blog posts`,
-      result.errors
-    )
-    return
-  }
-
-  const posts = result.data.allMarkdownRemark.nodes
-
-  // Create blog posts pages
-  // But only if there's at least one markdown file found at "content/blog" (defined in gatsby-config.js)
-  // `context` is available in the template as a prop and as a variable in GraphQL
-
-  if (posts.length > 0) {
-    posts.forEach((post, index) => {
-      const previousPostId = index === 0 ? null : posts[index - 1].id
-      const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id
-
-      createPage({
-        path: post.fields.slug,
-        component: blogPost,
-        context: {
-          id: post.id,
-          previousPostId,
-          nextPostId,
-        },
-      })
-    })
-  }
-}
+const slugify = (text) => slug(text).toLowerCase();
 
 /**
  * @type {import('gatsby').GatsbyNode['onCreateNode']}
  */
 exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions
+  const { createNodeField } = actions;
+
+  let slug;
 
   if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode })
+    const fileNode = getNode(node.parent);
+    const parsedFilePath = path.parse(fileNode.relativePath);
+    if (
+      Object.prototype.hasOwnProperty.call(node, "frontmatter") &&
+      Object.prototype.hasOwnProperty.call(node.frontmatter, "title")
+    ) {
+      slug = `/${slugify(node.frontmatter.title)}/`;
+    } else if (parsedFilePath.name !== "index" && parsedFilePath.dir !== "") {
+      slug = `/${parsedFilePath.dir}/${parsedFilePath.name}/`;
+    } else if (parsedFilePath.dir === "") {
+      slug = `/${parsedFilePath.name}/`;
+    } else {
+      slug = `/${parsedFilePath.dir}/`;
+    }
 
-    createNodeField({
-      name: `slug`,
-      node,
-      value,
-    })
+    if (Object.prototype.hasOwnProperty.call(node, "frontmatter")) {
+      if (Object.prototype.hasOwnProperty.call(node.frontmatter, "slug"))
+        slug = `/${slugify(node.frontmatter.slug)}/`;
+      if (Object.prototype.hasOwnProperty.call(node.frontmatter, "date")) {
+        const date = moment(node.frontmatter.date, siteConfig.dateFromFormat);
+        if (!date.isValid)
+          console.warn(`WARNING: Invalid date.`, node.frontmatter);
+        
+        createNodeField({
+          node,
+          name: "date",
+          value: date.toISOString(),
+        });
+      }
+    }
+    createNodeField({ node, name: "slug", value: useSlash(slug) });
   }
-}
+};
 
-/**
- * @type {import('gatsby').GatsbyNode['createSchemaCustomization']}
- */
-exports.createSchemaCustomization = ({ actions }) => {
-  const { createTypes } = actions
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions;
+  const postPageTemplate = path.resolve("src/templates/post-template.jsx");
+  const pagePageTemplate = path.resolve("src/templates/page-template.jsx");
+  const tagPageTemplate = path.resolve("src/templates/tag-template.jsx");
+  const blogPageTemplate = path.resolve("src/templates/blog-template.jsx");
 
-  // Explicitly define the siteMetadata {} object
-  // This way those will always be defined even if removed from gatsby-config.js
+  const markdownQueryResult = await graphql(
+    `
+      {
+        allMarkdownRemark(sort: {frontmatter: {date: DESC}}) {
+          edges {
+            node {
+              fields {
+                slug
+              }
+              frontmatter {
+                template
+                title
+                tags
+                date
+              }
+            }
+          }
+        }
+      }
+    `
+  );
 
-  // Also explicitly define the Markdown frontmatter
-  // This way the "MarkdownRemark" queries will return `null` even when no
-  // blog posts are stored inside "content/blog" instead of returning an error
-  createTypes(`
-    type SiteSiteMetadata {
-      author: Author
-      siteUrl: String
-      social: Social
+  if (markdownQueryResult.errors) {
+    console.error(markdownQueryResult.errors);
+    throw markdownQueryResult.errors;
+  }
+
+  // Filter data
+  const tagSet = new Set();
+  const postEdges = [];
+  const pageEdges = [];
+
+  markdownQueryResult.data.allMarkdownRemark.edges.forEach((edge) => {
+    if (edge.node.frontmatter.tags) {
+      edge.node.frontmatter.tags.forEach((tag) => {
+        tagSet.add(tag);
+      });
     }
 
-    type Author {
-      name: String
-      summary: String
+    if (edge.node.frontmatter.template === "post") {
+      postEdges.push(edge);
     }
 
-    type Social {
-      twitter: String
+    if (edge.node.frontmatter.template === "page") {
+      pageEdges.push(edge);
     }
+  });
 
-    type MarkdownRemark implements Node {
-      frontmatter: Frontmatter
-      fields: Fields
-    }
+  // Create tagList
+  const tagList = Array.from(tagSet);
 
-    type Frontmatter {
-      title: String
-      description: String
-      date: Date @dateformat
+  // Get latest posts
+  const latestPostEdges = [];
+  postEdges.forEach((edge) => {
+    if (latestPostEdges.length < siteConfig.numberLatestPost) {
+      latestPostEdges.push(edge);
     }
+  });
 
-    type Fields {
-      slug: String
+  // Create post page
+  postEdges.forEach((edge, index) => {
+    const nextID = index + 1 < postEdges.length ? index + 1 : 0;
+    const prevID = index - 1 >= 0 ? index - 1 : postEdges.length - 1;
+    const nextEdge = postEdges[nextID];
+    const prevEdge = postEdges[prevID];
+
+    createPage({
+      path: useSlash(edge.node.fields.slug),
+      component: postPageTemplate,
+      context: {
+        slug: edge.node.fields.slug,
+        nexttitle: nextEdge.node.frontmatter.title,
+        nextslug: nextEdge.node.fields.slug,
+        prevtitle: prevEdge.node.frontmatter.title,
+        prevslug: prevEdge.node.fields.slug,
+        tagList,
+        latestPostEdges,
+      },
+    });
+  });
+
+  // Create page page
+  pageEdges.forEach((edge) => {
+    createPage({
+      path: useSlash(edge.node.fields.slug),
+      component: pagePageTemplate,
+      context: {
+        slug: edge.node.fields.slug,
+        tagList,
+        latestPostEdges,
+      },
+    });
+  });
+
+  // common config for pagination
+  const postsPerPage = siteConfig.postsPerPage;
+  const pathPrefixPagination = siteConfig.pathPrefixPagination;
+
+  // create tag page
+  tagList.forEach((tag) => {
+    const tagPosts = postEdges.filter((edge) => {
+      const tags = edge.node.frontmatter.tags;
+      return tags && tags.includes(tag);
+    });
+
+    const numTagPages = Math.ceil(tagPosts.length / postsPerPage);
+    const basePath = `${siteConfig.pathPrefixTag}/${slugify(tag)}`;
+
+    for (let i = 0; i < numTagPages; i++) {
+      createPage({
+        path: useSlash(
+          i === 0
+            ? `${basePath}`
+            : `${basePath}${pathPrefixPagination}/${i + 1}`
+        ),
+        component: tagPageTemplate,
+        context: {
+          tag,
+          tagList,
+          latestPostEdges,
+          limit: postsPerPage,
+          skip: i * postsPerPage,
+          currentPage: i + 1,
+          totalPages: numTagPages,
+        },
+      });
     }
-  `)
-}
+  });
+
+  // Create blog page
+  {
+    const numBlogPages = Math.ceil(postEdges.length / postsPerPage);
+    const basePath = siteConfig.pathPrefixBlog;
+
+    for (let i = 0; i < numBlogPages; i++) {
+      createPage({
+        path: useSlash(
+          i === 0
+            ? `${basePath}`
+            : `${basePath}${pathPrefixPagination}/${i + 1}`
+        ),
+        component: blogPageTemplate,
+        context: {
+          tagList,
+          latestPostEdges,
+          limit: postsPerPage,
+          skip: i * postsPerPage,
+          currentPage: i + 1,
+          totalPages: numBlogPages,
+        },
+      });
+    }
+  }
+};
