@@ -112,33 +112,23 @@ const config = {
   // Use for footer
   socialLinks: [
     {
-      label: "Codepen",
-      url: "https://codepen.io/completejavascript/",
-      iconClassName: "fab codepen",
-    },
-    {
-      label: "FreeCodeCamp",
-      url: "", // Ignore
-      iconClassName: "fab free-code-camp",
-    },
-    {
       label: "GitHub",
-      url: "https://github.com/completejavascript",
+      url: "https://github.com/chungkwonryu",
       iconClassName: "fab github",
     },
     {
       label: "Facebook",
-      url: "https://www.facebook.com/completejavascript/",
+      url: "",
       iconClassName: "fab facebook-f",
     },
     {
       label: "Linkedin",
-      url: "https://www.linkedin.com/in/completejavascript/",
+      url: "",
       iconClassName: "fab linkedin-in",
     },
     {
       label: "Twitter",
-      url: "https://twitter.com/CmpltJavaScript",
+      url: "",
       iconClassName: "fab twitter",
     },
     {
