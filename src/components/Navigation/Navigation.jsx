@@ -14,7 +14,7 @@ const Navigation = ({ brand, title, links }) => {
 
 	return (
 		<>
-			<nav className="bg-white shadow-lg">
+			<nav className="bg-white dark:bg-neutral-900 shadow-lg dark:shadow-none">
 				<div className="h-16 items-center justify-between flex mx-auto max-w-full py-0 px-6 w-full">
 					<NavBrand brand={brand} title={title} />
 					<div className="flex">

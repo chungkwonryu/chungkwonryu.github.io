@@ -10,7 +10,7 @@ const NavLinksDropdown = ({ links }) => {
             to={link.url}
             activeClassName="active"
           >
-            <span className="text-slate-400 hover:text-slate-800 block font-medium py-3 active:text-slate-800">
+            <span className="text-neutral-400 dark:hover:text-neutral-100 hover:text-neutral-800 block font-medium py-3 active:text-slate-800">
               {link.label}
             </span>
           </Link>

@@ -10,7 +10,7 @@ const NavLinks = ({ links }) => {
           to={link.url}
           activeClassName="active"
         >
-          <span className="text-slate-400 mx-4 font-medium hover:text-slate-800 active:text-slate-800">
+          <span className="text-neutral-400 mx-4 font-medium dark:hover:text-neutral-100 hover:text-neutral-900 active:text-slate-800">
             {link.label}
           </span>
         </Link>
