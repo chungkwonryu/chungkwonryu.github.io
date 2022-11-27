@@ -12,9 +12,9 @@ const config = {
   siteLang: "en",
   siteFBAppID: "", // FB Application ID for using app insights
   googleAnalyticsID: "", // GA tracking ID.
-  postDefaultCategoryID: "", // Default category for posts.
+  postDefaultCategoryID: "Programming", // Default category for posts.
   // Common for tag, category pages and widget
-  numberLatestPost: 8,
+  numberLatestPost: 5,
   postsPerPage: 6,
   // Use for post
   dateFromFormat: "YYYY-MM-DDTHH:mm:ssZ", // Date format used in the frontmatter.
@@ -62,19 +62,15 @@ const config = {
   searchEngineID: "008548374781244864787:9ybvtnkbt7o",
   hasSearch: true,
   // Use for links widget
-  sidebarSticky: true,
+  // sidebarSticky: true,
   sidebarLinks: [
     {
-      label: "Complete JavaScript",
-      url: "https://completejavascript.com/",
+      label: "Google(for test)",
+      url: "https://www.google.com/",
     },
     {
-      label: "Lam Pham Blog",
-      url: "https://phamvanlam.com/",
-    },
-    {
-      label: "Lam Pham Portfolio",
-      url: "http://about.phamvanlam.com/",
+      label: "Naver(for test)",
+      url: "https://www.naver.com/",
     },
   ],
   // Use for user info
@@ -97,17 +93,12 @@ const config = {
       url: "https://chungkwonryu.github.io/",
       iconClassName: "fas globe",
     },
-    {
-      label: "Linkedin",
-      url: "https://www.linkedin.com/in/completejavascript/",
-      iconClassName: "fab linkedin-in",
-    },
   ],
   // Use for navigation
   navTitle: "CK Devlog",
   navLinks: [
     { label: "About", url: "/about" },
-    { label: "Contact", url: "/contact" },
+    { label: "Projects", url: "/project" },
   ],
   // Use for footer
   socialLinks: [
@@ -141,6 +132,7 @@ const config = {
     { label: "Home", url: "/" },
     { label: "About", url: "/about" },
     { label: "Contact", url: "/contact" },
+    { label: "Projects", url: "/project" },
     { label: "Terms of Use", url: "/terms" },
     { label: "Privacy Policy", url: "/privacy" },
   ],

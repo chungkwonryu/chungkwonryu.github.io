@@ -93,7 +93,7 @@ module.exports = {
         setup(ref) {
           const ret = ref.query.site.siteMetadata.rssMetadata;
           ret.allMarkdownRemark = ref.query.allMarkdownRemark;
-          ret.generator = "Gatsby Blog Template";
+          ret.generator = "CK Devlog";
           return ret;
         },
         query: `
@@ -121,7 +121,7 @@ module.exports = {
                 date: edge.node.fields.date,
                 title: edge.node.frontmatter.title,
                 description: edge.node.excerpt,
-                url: rssMetadata.site_url + edge.node.fields.slug,
+                url: encodeURI(rssMetadata.site_url) + edge.node.fields.slug,
                 guid: rssMetadata.site_url + edge.node.fields.slug,
                 custom_elements: [
                   { "content:encoded": edge.node.html },
@@ -133,7 +133,7 @@ module.exports = {
             {
               allMarkdownRemark(
                 limit: 1000,
-                sort: { order: DESC, fields: [frontmatter___date] },
+                sort: { frontmatter: {date: DESC } }
                 filter: {
                   frontmatter: {
                     template: { eq: "post" }
