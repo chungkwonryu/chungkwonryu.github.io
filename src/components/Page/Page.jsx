@@ -8,7 +8,7 @@ const Page = ({ postNode, slug }) => {
   }
 
   return (
-    <article class="prose lg:prose-lg">
+    <article className="prose lg:prose-lg">
       <div className="py-6"
         dangerouslySetInnerHTML={{ __html: postNode.html }}
       />

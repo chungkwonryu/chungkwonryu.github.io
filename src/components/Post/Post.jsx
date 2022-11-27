@@ -21,7 +21,7 @@ const Post = ({ postNode, config, slug }) => {
         <PostShare postPath={slug} postNode={postNode} />
       </div>
       <PostDivider />
-      <article class="prose lg:prose-lg">
+      <article className="prose lg:prose-lg">
         <div className="py-6" dangerouslySetInnerHTML={{ __html: postNode.html }} />
       </article>
       <PostDivider />
