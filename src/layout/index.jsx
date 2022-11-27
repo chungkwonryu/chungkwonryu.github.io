@@ -9,7 +9,7 @@ import "../components/Icons/FontAwesome";
 import ScrollToTop from "../components/ScrollToTop/ScrollToTop";
 
 const MainLayout = ({ children, hasFooter = true }) => (
-  <div>
+  <div className="dark:bg-gray-900 dark:text-white">
     <Helmet htmlAttributes={{ lang: siteConfig.siteLang }}>
       <meta name="description" content={siteConfig.siteDescription} />
       <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
