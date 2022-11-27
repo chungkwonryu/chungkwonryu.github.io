@@ -7,17 +7,17 @@ import Header from "../components/Header/Header";
 import config from "../../data/SiteConfig";
 
 const PageNotFound = () => (
-  <Layout hasFooter={false}>
+  <Layout hasFooter={true}>
     <div>
       <Helmet title={`${config.pageNotFoundTitle} - ${config.siteTitle}`} />
       <SEO />
       <Header title={`${config.pageNotFoundTitle}`} />
-      <div className="my-24 mx-auto max-w-full py-16 px-6 w-full">
-        <p>{config.pageNotFoundContent}</p>
+      <div className="h-screen my-24 mx-auto max-w-full py-16 px-6 w-full">
+        <p className="text-xl p-4">{config.pageNotFoundContent}</p>
         <Link to="/">
-          <div className="bg-sky-500 border-sky-500 text-white items-center border rounded-sm cursor-pointer inline-flex text-3xl h-14 justify-center mx-0 mt-0 mb-3 py-0 px-6 outline-0 no-underline normal-case whitespace-nowrap">
+          <button className="btn-primary ml-4">
             {config.pageNotFoundBtn}
-          </div>
+          </button>
         </Link>
       </div>
     </div>
