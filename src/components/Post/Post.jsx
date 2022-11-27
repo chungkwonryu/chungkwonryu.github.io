@@ -4,6 +4,7 @@ import PostDivider from "./PostDivider";
 import PostTags from "./PostTags";
 import PostShare from "./PostShare";
 import PostCategories from "./PostCategories";
+import Comment from "../Comment/Comment";
 
 const Post = ({ postNode, config, slug }) => {
   const post = postNode.frontmatter;
@@ -32,6 +33,7 @@ const Post = ({ postNode, config, slug }) => {
         </small>
       </div>
       <PostDivider />
+      <Comment />
     </div>
   );
 };

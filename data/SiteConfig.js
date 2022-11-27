@@ -141,6 +141,8 @@ const config = {
   // Use for manifest
   themeColor: "#2196F3", // Used for setting manifest and progress theme colors.
   backgroundColor: "#FFF", // Used for setting manifest background color.
+  // Utterances (comment)
+  utteranceRepo: "chungkwonryu/blog-utterances",
 };
 
 // Validate
