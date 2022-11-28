@@ -8,7 +8,6 @@ import WidgetSearch from "./WidgetSearch";
 const Sidebar = ({ tagList, categoryList, latestPostEdges, links }) => {
   return (
     <aside className="w-full h-full">
-      <WidgetSearch />
 
       {latestPostEdges && (
         <WidgetLatestPosts latestPostEdges={latestPostEdges} />
