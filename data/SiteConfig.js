@@ -98,7 +98,7 @@ const config = {
   navTitle: "CK Devlog",
   navLinks: [
     { label: "About", url: "/about" },
-    { label: "Projects", url: "/project" },
+    { label: "Projects", url: "/projects" },
   ],
   // Use for footer
   socialLinks: [
@@ -124,17 +124,14 @@ const config = {
     },
     {
       label: "RSS",
-      url: "https://gb-template.netlify.com/rss.xml",
+      url: "https://chungkwonryu.github.io/rss.xml",
       iconClassName: "fas rss",
     },
   ],
   footerLinks: [
     { label: "Home", url: "/" },
     { label: "About", url: "/about" },
-    { label: "Contact", url: "/contact" },
-    { label: "Projects", url: "/project" },
-    { label: "Terms of Use", url: "/terms" },
-    { label: "Privacy Policy", url: "/privacy" },
+    { label: "Projects", url: "/projects" },
   ],
   copyright:
     "Copyright © 2022-2022 Chungkwon Ryu. Using Lam Pham's gb-template.",

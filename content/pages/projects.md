@@ -1,8 +1,8 @@
 ---
 template: "page"
-title: "Project"
+title: "Projects"
 description: "My Projects"
-slug: "project"
+slug: "projects"
 ---
 
 ## My Projects Here
