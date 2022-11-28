@@ -6,7 +6,7 @@ import NavLinksDropdown from "./NavLinksDropdown"
 import DarkModeToggle from "../DarkModeToggle/DarkModeToggle";
 import NavSearch from "./NavSearch";
 
-const Navigation = ({ brand, title, links }) => {
+const Navigation = ({ title, links }) => {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 
 	const handleClick = () => {
@@ -15,7 +15,7 @@ const Navigation = ({ brand, title, links }) => {
 
 	return (
 		<>
-			<nav className="bg-white dark:bg-neutral-900 shadow-lg dark:shadow-none">
+			<nav className="fixed top w-full z-50 bg-white dark:bg-neutral-900 shadow-lg dark:shadow-none">
 				<div className="h-16 items-center justify-between flex mx-auto max-w-full py-0 px-6 w-full">
 					<NavBrand title={title} />
 					<div className="flex">

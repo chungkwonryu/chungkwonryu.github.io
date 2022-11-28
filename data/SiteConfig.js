@@ -56,11 +56,8 @@ const config = {
   tagWidgetTitle: "Tags",
   latestPostsWidgetTitle: "Latest posts",
   linksWidgetTitle: "Links",
-  // Use for Google custom search
-  searchWidgetTitle: "Looking for?",
-  searchWidgetPlaceHolder: "Enter keyword",
-  searchEngineID: "008548374781244864787:9ybvtnkbt7o",
-  hasSearch: true,
+  // Use for search
+  searchHeaderTitle: "Search Posts",
   // Use for links widget
   // sidebarSticky: true,
   sidebarLinks: [

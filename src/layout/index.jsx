@@ -4,7 +4,6 @@ import Navigation from "../components/Navigation/Navigation";
 import Footer from "../components/Footer/Footer";
 import siteConfig from "../../data/SiteConfig";
 import { useSlash } from "../utils/helpers";
-import brand from "../../content/images/brand.png";
 import "../components/Icons/FontAwesome";
 import ScrollToTop from "../components/ScrollToTop/ScrollToTop";
 
@@ -16,7 +15,6 @@ const MainLayout = ({ children, hasFooter = true }) => (
       <link rel="canonical" href={useSlash(siteConfig.siteUrl)} />
     </Helmet>
     <Navigation
-      brand={brand}
       title={siteConfig.navTitle}
       links={siteConfig.navLinks}
     />
