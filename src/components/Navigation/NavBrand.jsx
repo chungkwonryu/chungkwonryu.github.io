@@ -1,13 +1,9 @@
 import React from "react";
 import { Link } from "gatsby";
 
-const NavBrand = ({ brand, title }) => (
+const NavBrand = ({ title }) => (
   <Link to="/">
-    <div className="text-slate-800 dark:text-neutral-100 items-center flex">
-      <img
-        className="h-8 w-auto mr-4 rounded"
-        src={brand}
-        alt="Brand Image" />
+    <div className="p-2 rounded-md font-bold text-white dark:text-neutral-800 bg-black dark:bg-neutral-100 items-center flex">
       <span>
         <strong>{title}</strong>
       </span>

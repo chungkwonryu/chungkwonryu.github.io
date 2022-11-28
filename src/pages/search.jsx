@@ -8,7 +8,7 @@ import config from "../../data/SiteConfig";
 const SearchPage = () => {
   return (
     <Layout>
-      <div>
+      <div className="h-screen">
         <Helmet title={config.siteTitle} />
         <SEO />
         <Search />
