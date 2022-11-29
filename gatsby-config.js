@@ -204,11 +204,13 @@ module.exports = {
               nodes {
                 id
                 rawMarkdownBody
+                excerpt
                 fields{
                   slug
                 }
                 frontmatter {
                   title
+                  date
                 }
               }
             }
@@ -220,9 +222,11 @@ module.exports = {
         normalizer: ({ data }) =>
           data.allMarkdownRemark.nodes.map(node => ({
             id: node.id,
-            path: node.fields.slug,
+            slug: node.fields.slug,
             title: node.frontmatter.title,
             body: node.rawMarkdownBody,
+            excerpt: node.excerpt,
+            date: node.frontmatter.date,
           })),
       },
     },

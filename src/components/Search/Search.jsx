@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { graphql, useStaticQuery, Link } from "gatsby";
 import { useGatsbyPluginFusejs } from "react-use-fusejs";
 import { AppContext } from "../../context/app";
+import PostInfo from "../PostListing/PostInfo";
 
 const Search = () => {
   const data = useStaticQuery(graphql`
@@ -40,15 +41,14 @@ const Search = () => {
           onChange={e => setQuery(e.target.value)}
         />
         <div>
-          <ul>
-            {result.map(({ item }) => (
-              <li key={item.id}>
-                <Link to={item.path}>
-                  {item.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {result.map(({ item }) => (
+            <article
+              key={item.id}
+              className="flex flex-col"
+            >
+              <PostInfo post={item} />
+            </article>
+          ))}
         </div>
       </div>
     </div>
