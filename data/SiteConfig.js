@@ -15,7 +15,7 @@ const config = {
   postDefaultCategoryID: "Programming", // Default category for posts.
   // Common for tag, category pages and widget
   numberLatestPost: 5,
-  postsPerPage: 6,
+  postsPerPage: 5,
   // Use for post
   dateFromFormat: "YYYY-MM-DDTHH:mm:ssZ", // Date format used in the frontmatter.
   dateFormat: "MMMM Do, YYYY", // Date format for display.

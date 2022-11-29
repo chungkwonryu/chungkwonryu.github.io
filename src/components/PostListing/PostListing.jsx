@@ -1,51 +1,57 @@
-import React, { Component } from "react";
+import React, { useEffect, useState, Component } from "react";
 import Article from "./Article";
 import Button from "../Button/Button";
+import config from "../../../data/SiteConfig";
 
-class PostListing extends Component {
-  state = {
-    maxPosts:
-      (this.props.hasLoadmore || this.props.forcePostsPerPage) &&
-        this.props.postsPerPage
-        ? this.props.postsPerPage
-        : this.props.postList.length,
+const PostListing = (props) => {
+  const { postList, hasThumbnail = true } = props;
+
+  // current max posts to show
+  const maxPosts = config.postsPerPage;
+
+  // State for the list
+  const [list, setList] = useState([...postList.slice(0, maxPosts)]);
+
+  // State to trigger load more
+  const [loadMore, setLoadMore] = useState(false);
+
+  // State of whether there is more to load
+  const [hasMore, setHasMore] = useState(postList.length > maxPosts);
+  
+  // Load more button click handler
+  const handleLoadmore = () => {
+    setLoadMore(true);
   };
 
-  handleLoadmore = () => {
-    const { hasLoadmore = false, numberLoadmore } = this.props;
+  useEffect(() => {
+    if (loadMore && hasMore) {
+      const currentLength = list.length;
+      const isMore = currentLength < postList.length;
+      const nextResults = isMore
+        ? postList.slice(currentLength, currentLength + config.postsPerPage)
+        : []
+      setList([...list, ...nextResults]);
+      setLoadMore(false);
+    }
+    setHasMore(list.length < postList.length)
+  }, [loadMore])
 
-    if (!hasLoadmore) return;
-
-    this.setState((prevState) => ({
-      maxPosts: prevState.maxPosts + numberLoadmore,
-    }));
-  };
-
-  render() {
-    const { postList, hasThumbnail = true, hasLoadmore = false } = this.props;
-    const { maxPosts } = this.state;
-
-    return (
-      <>
-        <div>
-          {postList.map((post, index) => {
-            if (index < maxPosts)
-              return (
-                <Article key={post.title} post={post} hasThumbnail={hasThumbnail} />
-              );
-            return null;
-          })}
+  return (
+    <>
+      <div>
+        {list.map((post, index) => {
+          return <Article key={post.title} post={post} hasThumbnail={hasThumbnail} />
+        })}
+      </div>
+      {hasMore && (
+        <div className="text-center mt-8 pt-3">
+          <Button onClick={handleLoadmore}>
+            {config.btnLoadmore}
+          </Button>
         </div>
-        {hasLoadmore && maxPosts < postList.length && (
-          <div className="text-center mt-8 pt-3">
-            <Button onClick={this.handleLoadmore}>
-              {this.props.btnLoadmore}
-            </Button>
-          </div>
-        )}
-      </>
-    );
-  }
-}
+      )}
+    </>
+  );
+};
 
 export default PostListing;

@@ -5,7 +5,6 @@ import Layout from "../layout";
 import MainContainer from "../components/MainContainer/MainContainer";
 import Sidebar from "../components/Sidebar/Sidebar";
 import PostListing from "../components/PostListing/PostListing";
-import Pagination from "../components/Pagination/Pagination";
 import { getPostList } from "../utils/helpers";
 import config from "../../data/SiteConfig";
 
@@ -19,13 +18,6 @@ const BlogTemplate = ({ data, pageContext }) => {
       <PostListing
         postList={postList}
         hasThumbnail={config.blogHasThumbnail}
-        hasLoadmore={false}
-      />
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        pathPrefix={config.pathPrefixBlog}
-        pathPrefixPagination={config.pathPrefixPagination}
       />
     </>
   );

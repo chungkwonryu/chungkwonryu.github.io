@@ -6,7 +6,6 @@ import Header from "../components/Header/Header";
 import MainContainer from "../components/MainContainer/MainContainer";
 import Sidebar from "../components/Sidebar/Sidebar";
 import PostListing from "../components/PostListing/PostListing";
-import Pagination from "../components/Pagination/Pagination";
 import {
   getPostList,
   getCategoryPathWithoutTrailingSlash,
@@ -19,8 +18,6 @@ const CategoryTemplate = ({ data, pageContext }) => {
     categoryList,
     tagList,
     latestPostEdges,
-    currentPage,
-    totalPages,
   } = pageContext;
   const postEdges = data.allMarkdownRemark.edges;
   const postList = getPostList(postEdges);
@@ -30,12 +27,6 @@ const CategoryTemplate = ({ data, pageContext }) => {
         postList={postList}
         hasThumbnail={config.categoryHasThumbnail}
         hasLoadmore={false}
-      />
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        pathPrefix={getCategoryPathWithoutTrailingSlash(category)}
-        pathPrefixPagination={config.pathPrefixPagination}
       />
     </>
   );
@@ -65,10 +56,9 @@ export default CategoryTemplate;
 
 /* eslint no-undef: "off" */
 export const pageQuery = graphql`
-  query CategoryPage($category: String, $skip: Int!, $limit: Int!) {
+  query CategoryPage($category: String) {
     allMarkdownRemark(
-      limit: $limit
-      skip: $skip
+      limit: 2000
       sort: { frontmatter: { date: DESC } }
       filter: {
         frontmatter: {

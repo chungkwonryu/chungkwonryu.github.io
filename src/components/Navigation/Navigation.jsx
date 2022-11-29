@@ -15,7 +15,7 @@ const Navigation = ({ title, links }) => {
 
 	return (
 		<>
-			<nav className="fixed top w-full z-50 bg-white dark:bg-neutral-900 shadow-lg dark:shadow-none">
+			<nav className="fixed top w-full z-50 bg-white dark:bg-neutral-900 shadow-lg dark:shadow-sm dark:shadow-neutral-800">
 				<div className="h-16 items-center justify-between flex mx-auto max-w-full py-0 px-6 w-full">
 					<NavBrand title={title} />
 					<div className="flex">

@@ -21,19 +21,7 @@ class Index extends React.Component {
         <PostListing
           postList={postList}
           hasThumbnail={config.homeHasThumbnail}
-          hasLoadmore={config.homeHasLoadmore}
-          postsPerPage={config.postsPerPage}
-          numberLoadmore={config.numberLoadmore}
-          btnLoadmore={config.btnLoadmore}
-          forcePostsPerPage={config.homeHasLoadmore == false}
         />
-        {!config.homeHasLoadmore && postList.length > config.postsPerPage && (
-          <div>
-            <Link to={`${config.pathPrefixBlog}${config.pathPrefixPagination}/2`} >
-              {config.homeMoreArticles}
-            </Link>
-          </div>
-        )}
       </>
     );
 

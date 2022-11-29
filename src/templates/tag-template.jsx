@@ -6,7 +6,6 @@ import Header from "../components/Header/Header";
 import MainContainer from "../components/MainContainer/MainContainer";
 import Sidebar from "../components/Sidebar/Sidebar";
 import PostListing from "../components/PostListing/PostListing";
-import Pagination from "../components/Pagination/Pagination";
 import { getPostList, getTagPathWithoutTrailingSlash } from "../utils/helpers";
 import config from "../../data/SiteConfig";
 
@@ -16,8 +15,6 @@ const TagTemplate = ({ data, pageContext }) => {
     tagList,
     categoryList,
     latestPostEdges,
-    currentPage,
-    totalPages,
   } = pageContext;
   const postEdges = data.allMarkdownRemark.edges;
   const postList = getPostList(postEdges);
@@ -26,13 +23,6 @@ const TagTemplate = ({ data, pageContext }) => {
       <PostListing
         postList={postList}
         hasThumbnail={config.tagHasThumbnail}
-        hasLoadmore={false}
-      />
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        pathPrefix={getTagPathWithoutTrailingSlash(tag)}
-        pathPrefixPagination={config.pathPrefixPagination}
       />
     </>
   );
@@ -58,10 +48,9 @@ const TagTemplate = ({ data, pageContext }) => {
 export default TagTemplate;
 
 export const pageQuery = graphql`
-  query TagPage($tag: String, $skip: Int!, $limit: Int!) {
+  query TagPage($tag: String) {
     allMarkdownRemark(
-      limit: $limit
-      skip: $skip
+      limit: 2000
       sort: {frontmatter: {date : DESC } }
       filter: {frontmatter: { tags: { in: [$tag] }, template: { eq: "post" } } }
     ) {
