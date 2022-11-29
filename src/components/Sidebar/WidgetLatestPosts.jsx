@@ -14,7 +14,7 @@ const WidgetLatesPosts = ({ latestPostEdges }) => {
       <div className="divide-y divide-slate-300">
         {postList.map((post) => (
           <div key={post.title}>
-            <span className="block py-2 text-sky-500 hover:text-sky-700">
+            <span className="block py-2 text-sky-500 hover:text-sky-700 cursor-pointer">
               <Link to={post.slug}>
                 {post.title}
               </Link>

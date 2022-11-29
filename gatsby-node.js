@@ -71,7 +71,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const pagePageTemplate = path.resolve("src/templates/page-template.jsx");
   const tagPageTemplate = path.resolve("src/templates/tag-template.jsx");
   const categoryPageTemplate = path.resolve("src/templates/category-template.jsx");
-  const blogPageTemplate = path.resolve("src/templates/blog-template.jsx");
+  //const blogPageTemplate = path.resolve("src/templates/blog-template.jsx");
 
   const markdownQueryResult = await graphql(
     `
@@ -246,7 +246,8 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   });
 
-  // Create blog page
+  // Create blog page (pagination을 쓰는 경우 필요한 것으로 보임)
+  /*
   {
     const numBlogPages = Math.ceil(postEdges.length / postsPerPage);
     const basePath = siteConfig.pathPrefixBlog;
@@ -271,4 +272,5 @@ exports.createPages = async ({ graphql, actions }) => {
       });
     }
   }
+  */
 };

@@ -8,8 +8,8 @@ const config = {
   pathPrefix: "", // Prefixes all links. For cases when deployed to example.github.io/gatsby-advanced-starter/.
   siteDescription: "공부한 것들을 기록하고 정리하기 위한 저장소", // Website description used for RSS feeds/meta description tag.
   siteRss: "/rss.xml", // Path to the RSS file.
-  siteRssTitle: "My Site's RSS Feed",
-  siteLang: "en",
+  siteRssTitle: "CK Devlog Rss Feed",
+  siteLang: "ko",
   siteFBAppID: "", // FB Application ID for using app insights
   googleAnalyticsID: "", // GA tracking ID.
   postDefaultCategoryID: "Programming", // Default category for posts.
@@ -23,16 +23,11 @@ const config = {
   postInCategories: "",
   postOnDate: "Posted on",
   // Use for comment
-  lazyLoadComments: true,
-  disqusShortname: "ck-blog", // Disqus shortname.
   btnLoadComments: "Load comments",
   // Use for home page
-  numberLoadmore: 6,
   btnLoadmore: "Load more",
-  homeHasLoadmore: false,
   homeHasThumbnail: true,
   homeHeader: "Home",
-  homeMoreArticles: "More articles",
   // Use for page
   pathPrefixPagination: "/page", // Prefix path for pagination
   pageNotFoundTitle: "Page Not Found", //
@@ -59,7 +54,6 @@ const config = {
   // Use for search
   searchHeaderTitle: "Search Posts",
   // Use for links widget
-  // sidebarSticky: true,
   sidebarLinks: [
     {
       label: "Google(for test)",
