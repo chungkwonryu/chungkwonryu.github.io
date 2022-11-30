@@ -57,7 +57,7 @@ export const indexQuery = graphql`
     allMarkdownRemark(
       limit: 2000
       sort: { frontmatter: { date: DESC } }
-      filter: { frontmatter: { template: { eq: "post" } } }
+      filter: { frontmatter: { template: { eq: "post" }, title: { ne: "Dummy Post" } } }
     ) {
       edges {
         node {

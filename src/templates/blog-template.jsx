@@ -49,7 +49,7 @@ export const pageQuery = graphql`
       limit: $limit
       skip: $skip
       sort: { frontmatter: { date: DESC } }
-      filter: { frontmatter: { template: { eq: "post" } } }
+      filter: { frontmatter: { template: { eq: "post" }, title: {ne: "Dummy Post" } } }
     ) {
       totalCount
       edges {

@@ -64,6 +64,7 @@ export const pageQuery = graphql`
         frontmatter: {
           categories: { in: [$category] }
           template: { eq: "post" }
+          title: {ne: "Dummy Post" }
         }
       }
     ) {

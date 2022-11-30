@@ -52,7 +52,7 @@ export const pageQuery = graphql`
     allMarkdownRemark(
       limit: 2000
       sort: {frontmatter: {date : DESC } }
-      filter: {frontmatter: { tags: { in: [$tag] }, template: { eq: "post" } } }
+      filter: {frontmatter: { tags: { in: [$tag] }, template: { eq: "post" }, title: {ne: "Dummy Post" } } }
     ) {
       totalCount
       edges {

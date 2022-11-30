@@ -199,7 +199,7 @@ module.exports = {
         query: `
           {
             allMarkdownRemark(
-              filter: { frontmatter: { template: { eq: "post" } } }
+              filter: { frontmatter: { template: { eq: "post" }, title: {ne: "Dummy Post"} } }
             ) {
               nodes {
                 id
