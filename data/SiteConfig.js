@@ -7,6 +7,7 @@ const config = {
   siteUrl: "https://chungkwonryu.github.io", // Domain of you
   pathPrefix: "", // Prefixes all links. For cases when deployed to example.github.io/gatsby-advanced-starter/.
   siteDescription: "공부한 것들을 기록하고 정리하기 위한 저장소", // Website description used for RSS feeds/meta description tag.
+  googleSearchConsoleContent: "mSwEWvD4Pd6FmYot3w_v09pwWRsVsoEj73DGGBkIhEo", //google search console에 등록하기 위한 값
   siteRss: "/rss.xml", // Path to the RSS file.
   siteRssTitle: "CK Devlog Rss Feed",
   siteLang: "ko",

@@ -11,6 +11,7 @@ const MainLayout = ({ children, hasFooter = true }) => (
   <div className="dark:bg-neutral-900 dark:text-gray-200">
     <Helmet htmlAttributes={{ lang: siteConfig.siteLang }}>
       <meta name="description" content={siteConfig.siteDescription} />
+      <meta name="google-site-verification" content={siteConfig.googleSearchConsoleContent} />
       <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
       <link rel="canonical" href={useSlash(siteConfig.siteUrl)} />
     </Helmet>
