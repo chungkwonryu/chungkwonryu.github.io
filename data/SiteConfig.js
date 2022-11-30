@@ -13,6 +13,7 @@ const config = {
   siteLang: "ko",
   siteFBAppID: "", // FB Application ID for using app insights
   googleAnalyticsID: "", // GA tracking ID.
+  basicCover: "../images/basic-cover-660x400.png", // cover가 없는 경우 기본 커버 (경로는 posts 기준)
   postDefaultCategoryID: "Programming", // Default category for posts.
   // Common for tag, category pages and widget
   numberLatestPost: 5,
