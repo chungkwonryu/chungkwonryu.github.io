@@ -4,16 +4,18 @@
  * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/
  */
 
-const path = require(`path`)
+const path = require("path");
 const slug = require("slug");
 const moment = require("moment");
 const siteConfig = require("./data/SiteConfig");
 
 const { createFilePath } = require(`gatsby-source-filesystem`)
 
+//------------------------ utils --------------------------------//
 // src/utils/helpers.js랑 겹치지만,
-// gatsby-node.js에서 해당 파일들을 require해오면
-// ESM vs CommonJS 문제로 인해서 빌드 실패한다.
+// gatsby-node.js에서 해당 파일들을 require해오면 ESM vs CommonJS 문제로 인해서 빌드 실패한다.
+// 따라서 여기서 새로 정의한다.
+
 const useSlash = (slug) => {
   if (!slug) return "/";
   if (slug.charAt(slug.length - 1) !== "/") return `${slug}/`;
@@ -21,6 +23,8 @@ const useSlash = (slug) => {
 };
 
 const slugify = (text) => slug(text).toLowerCase();
+
+//---------------------------------------------------------------//
 
 /**
  * @type {import('gatsby').GatsbyNode['onCreateNode']}
@@ -30,48 +34,75 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
   let slug;
 
+  // Node 생성시에 Markdown 파일들만 별도의 처리 추가
+  // (우리는 Markdown Node에 대해서만 페이지로 만들어주고 싶은 것)
   if (node.internal.type === `MarkdownRemark`) {
+    
+    // fileNode : node의 모든 정보 (Markdown의 내용까지 포함)
     const fileNode = getNode(node.parent);
+
+    // parsedFilePath
+    //  - root : (뭔지 모르겠음. 대부분 '')
+    //  - dir : (자신을 포함하는 디렉토리 이름? posts에 들은 것들은 ''. series에 들은 것들은 각 series 이름)
+    //  - base : (확장자를 포함하는 파일명)
+    //  - ext : (확장자)
+    //  - name : base - ext
     const parsedFilePath = path.parse(fileNode.relativePath);
-    if (
-      Object.prototype.hasOwnProperty.call(node, "frontmatter") &&
-      Object.prototype.hasOwnProperty.call(node.frontmatter, "title")
-    ) {
-      slug = `/${slugify(node.frontmatter.title)}/`;
-    } else if (parsedFilePath.name !== "index" && parsedFilePath.dir !== "") {
-      slug = `/${parsedFilePath.dir}/${parsedFilePath.name}/`;
-    } else if (parsedFilePath.dir === "") {
-      slug = `/${parsedFilePath.name}/`;
+
+    // Slug 생성 규칙
+    // 1. 가장 우선시 되는건 frontmatter에 있는 slug 필드
+    //  2. 그 다음은 frontmatter에 title이 있으면 그럴로 slugify
+    //    3. 그것도 없으면 파일명 기준
+    // 일반 포스트는 /[ ]/
+    // series 포스트는 /[series명]/[ ]/
+    if (parsedFilePath.dir !== "") {
+      slug = `/${parsedFilePath.dir}`;
     } else {
-      slug = `/${parsedFilePath.dir}/`;
+      slug = ``;
     }
 
     if (Object.prototype.hasOwnProperty.call(node, "frontmatter")) {
-      if (Object.prototype.hasOwnProperty.call(node.frontmatter, "slug"))
-        slug = `/${slugify(node.frontmatter.slug)}/`;
-      if (Object.prototype.hasOwnProperty.call(node.frontmatter, "date")) {
-        const date = moment(node.frontmatter.date, siteConfig.dateFromFormat);
-        if (!date.isValid)
-          console.warn(`WARNING: Invalid date.`, node.frontmatter);
-        
-        createNodeField({
-          node,
-          name: "date",
-          value: date.toISOString(),
-        });
+      if (Object.prototype.hasOwnProperty.call(node.frontmatter, "slug")) {
+        slug = slug + `/${slugify(node.frontmatter.slug)}/`;
+      } else if (Object.prototype.hasOwnProperty.call(node.frontmatter, "title")) {
+        slug = slug + `/${slugify(node.frontmatter.title)}/`;
+      } else {
+        slug = slug + `/${slugify(parsedFilePath.name)}/`;
       }
+    } else {
+      slug = slug + `/${slugify(parsedFilePath.name)}/`;
     }
+
     createNodeField({ node, name: "slug", value: useSlash(slug) });
+
+    // frontmatter에 적힌 date를 가지고 Node의 field에 정형화된 date 필드 추가
+    if (Object.prototype.hasOwnProperty.call(node, "frontmatter") && 
+      Object.prototype.hasOwnProperty.call(node.frontmatter, "date")) {
+      const date = moment(node.frontmatter.date, siteConfig.dateFromFormat);
+      if (!date.isValid)
+        console.warn(`WARNING: Invalid date.`, node.frontmatter);
+      else
+        createNodeField({ node, name: "date", value: date.toISOString() });
+    }
   }
 };
 
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
+  
+  // Markdown으로 작성한 각각의 포스트를 나타내기 위한 템플릿
   const postPageTemplate = path.resolve("src/templates/post-template.jsx");
+
+  // Post가 아닌 Markdown으로 작성한 페이지들을 나타내기 위한 템플릿 (e.g. About)
   const pagePageTemplate = path.resolve("src/templates/page-template.jsx");
-  const tagPageTemplate = path.resolve("src/templates/tag-template.jsx");
+  
+  // 특정 카테고리를 선택하면 나타나는 (해당 카테고리에 속하는 포스트들을 보여주는) 페이지를 위한 템플릿
   const categoryPageTemplate = path.resolve("src/templates/category-template.jsx");
-  //const blogPageTemplate = path.resolve("src/templates/blog-template.jsx");
+
+  // 특정 시리즈를 선택하면 나타나는 페이지를 위한 템플릿
+  const seriesPageTemplate = path.resolve("src/templates/series-template.jsx");
+
+  const archivesTemplate = path.resolve("src/templates/archives-template.jsx");
 
   const markdownQueryResult = await graphql(
     `
@@ -84,13 +115,12 @@ exports.createPages = async ({ graphql, actions }) => {
             node {
               fields {
                 slug
+                date
               }
               frontmatter {
                 template
                 title
-                tags
                 categories
-                date
               }
             }
           }
@@ -105,18 +135,11 @@ exports.createPages = async ({ graphql, actions }) => {
   }
 
   // Filter data
-  const tagSet = new Set();
   const categorySet = new Set();
   const postEdges = [];
   const pageEdges = [];
 
   markdownQueryResult.data.allMarkdownRemark.edges.forEach((edge) => {
-    if (edge.node.frontmatter.tags) {
-      edge.node.frontmatter.tags.forEach((tag) => {
-        tagSet.add(tag);
-      });
-    }
-
     if (edge.node.frontmatter.categories) {
       edge.node.frontmatter.categories.forEach((category) => {
         categorySet.add(category);
@@ -132,37 +155,23 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   });
 
-  // Create tagList, categoryList
-  const tagList = Array.from(tagSet);
+  // Create categoryList
   const categoryList = Array.from(categorySet);
 
   // Get latest posts
   const latestPostEdges = [];
-  postEdges.forEach((edge) => {
-    if (latestPostEdges.length < siteConfig.numberLatestPost) {
-      latestPostEdges.push(edge);
-    }
-  });
+  let count = 0;
+  for (count = 0; count < siteConfig.numberLatestPost && count < postEdges.length; count++) {
+    latestPostEdges.push(postEdges[count]);
+  }
 
   // Create post page
-  postEdges.forEach((edge, index) => {
-    const nextID = index + 1 < postEdges.length ? index + 1 : 0;
-    const prevID = index - 1 >= 0 ? index - 1 : postEdges.length - 1;
-    const nextEdge = postEdges[nextID];
-    const prevEdge = postEdges[prevID];
-
+  postEdges.forEach((edge) => {
     createPage({
       path: useSlash(edge.node.fields.slug),
       component: postPageTemplate,
       context: {
         slug: edge.node.fields.slug,
-        nexttitle: nextEdge.node.frontmatter.title,
-        nextslug: nextEdge.node.fields.slug,
-        prevtitle: prevEdge.node.frontmatter.title,
-        prevslug: prevEdge.node.fields.slug,
-        tagList,
-        categoryList,
-        latestPostEdges,
       },
     });
   });
@@ -174,106 +183,81 @@ exports.createPages = async ({ graphql, actions }) => {
       component: pagePageTemplate,
       context: {
         slug: edge.node.fields.slug,
-        tagList,
-        categoryList,
-        latestPostEdges,
       },
     });
   });
 
   // common config for pagination
   const postsPerPage = siteConfig.postsPerPage;
-  const pathPrefixPagination = siteConfig.pathPrefixPagination;
 
-  // create tag page
-  tagList.forEach((tag) => {
-    const tagPosts = postEdges.filter((edge) => {
-      const tags = edge.node.frontmatter.tags;
-      return tags && tags.includes(tag);
-    });
-
-    const numTagPages = Math.ceil(tagPosts.length / postsPerPage);
-    const basePath = `${siteConfig.pathPrefixTag}/${slugify(tag)}`;
-
-    for (let i = 0; i < numTagPages; i++) {
-      createPage({
-        path: useSlash(
-          i === 0
-            ? `${basePath}`
-            : `${basePath}${pathPrefixPagination}/${i + 1}`
-        ),
-        component: tagPageTemplate,
-        context: {
-          tag,
-          tagList,
-          categoryList,
-          latestPostEdges,
-          limit: postsPerPage,
-          skip: i * postsPerPage,
-          currentPage: i + 1,
-          totalPages: numTagPages,
-        },
-      });
-    }
-  });
-
-  // create category page
+  // create category list page
   categoryList.forEach((category) => {
     const categoryPosts = postEdges.filter((edge) => {
       const categories = edge.node.frontmatter.categories;
       return categories && categories.includes(category);
     });
 
-    const numCategoryPages = Math.ceil(categoryPosts.length / postsPerPage);
     const basePath = `${siteConfig.pathPrefixCategory}/${slugify(category)}`;
 
-    for (let i = 0; i < numCategoryPages; i++) {
-      createPage({
-        path: useSlash(
-          i === 0
-            ? `${basePath}`
-            : `${basePath}${pathPrefixPagination}/${i + 1}`
-        ),
-        component: categoryPageTemplate,
-        context: {
-          category,
-          tagList,
-          categoryList,
-          latestPostEdges,
-          limit: postsPerPage,
-          skip: i * postsPerPage,
-          currentPage: i + 1,
-          totalPages: numCategoryPages,
-        },
-      });
-    }
+    createPage({
+      path: useSlash(basePath),
+      component: categoryPageTemplate,
+      context: {
+        category,
+        categoryPosts,
+        limit: postsPerPage,
+      },
+    });
   });
 
-  // Create blog page (pagination을 쓰는 경우 필요한 것으로 보임)
-  /*
-  {
-    const numBlogPages = Math.ceil(postEdges.length / postsPerPage);
-    const basePath = siteConfig.pathPrefixBlog;
+  // Get series directory list
+  const seriesListQueryResult = await graphql(
+    `
+      {
+        allDirectory (
+          filter: {
+            sourceInstanceName: {eq: "series"}
+            relativePath: {ne: "" }
+          }
+        ){
+          edges {
+            node {
+              relativePath
+              name
+            }
+          }
+        }
+      }
+    `
+  )
 
-    for (let i = 0; i < numBlogPages; i++) {
-      createPage({
-        path: useSlash(
-          i === 0
-            ? `${basePath}`
-            : `${basePath}${pathPrefixPagination}/${i + 1}`
-        ),
-        component: blogPageTemplate,
-        context: {
-          tagList,
-          categoryList,
-          latestPostEdges,
-          limit: postsPerPage,
-          skip: i * postsPerPage,
-          currentPage: i + 1,
-          totalPages: numBlogPages,
-        },
-      });
-    }
-  }
-  */
+  seriesListQueryResult.data.allDirectory.edges.forEach((edge) => {
+    const currentSeries = edge.node.name;
+    const seriesPosts = postEdges.filter((postEdge) => {
+      const seriesInPost = postEdge.node.frontmatter.series;
+      return seriesInPost && (currentSeries === seriesInPost);
+    });
+
+    const basePath = `${slugify(currentSeries)}`;
+
+    createPage({
+      path: useSlash(basePath),
+      component: seriesPageTemplate,
+      context: {
+        currentSeries,
+        seriesPosts,
+        limit: postsPerPage,
+      },
+    });
+  });
+
+  // Create archives page
+  createPage({
+    path: `archives/`,
+    component: archivesTemplate,
+    context: {
+      categoryList,
+      latestPostEdges,
+    },
+  });
 };

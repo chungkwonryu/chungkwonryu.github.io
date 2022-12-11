@@ -30,6 +30,20 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
+        name: "images",
+        path: `${__dirname}/content/images/`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: "pages",
+        path: `${__dirname}/content/pages/`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
         name: "assets",
         path: `${__dirname}/static/`,
       },
@@ -37,8 +51,15 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/`,
+        path: `${__dirname}/content/posts`,
         name: `posts`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/content/series`,
+        name: `series`,
       },
     },
     {
@@ -49,8 +70,8 @@ module.exports = {
             resolve: `gatsby-remark-images`,
             options: {
               maxWidth: 660,
-              linkImagesToOriginal: false,
               quality: 100,
+              path: `${__dirname}/content/images`,
             },
           },
           {

@@ -4,6 +4,7 @@ import { getCategoryPath } from "../../utils/helpers";
 import config from "../../../data/SiteConfig";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+// Post에서 Post의 category들을 표시하기 위한 컴포넌트
 const PostCategories = ({
   categories,
   iconColor = "#444",

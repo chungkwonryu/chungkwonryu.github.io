@@ -4,24 +4,17 @@ import { graphql } from "gatsby";
 import Layout from "../layout";
 import Header from "../components/Header/Header";
 import MainContainer from "../components/MainContainer/MainContainer";
-import Sidebar from "../components/Sidebar/Sidebar";
 import Post from "../components/Post/Post";
 import SEO from "../components/SEO/SEO";
 import config from "../../data/SiteConfig";
 
+// markdown -> post 로 바꾸기 위한 템플릿
 const PostTemplate = ({ data, pageContext }) => {
-  const { slug, tagList, categoryList, latestPostEdges } = pageContext;
   const postNode = data.markdownRemark;
   const title = postNode.frontmatter.title;
-  const content = <Post postNode={postNode} config={config} slug={slug} />;
-  const sidebar = (
-    <Sidebar
-      tagList={tagList}
-      categoryList={categoryList}
-      latestPostEdges={latestPostEdges}
-      links={config.sidebarLinks}
-    />
-  );
+  const { slug } = pageContext;
+  const content = <Post postNode={postNode} />;
+
   return (
     <Layout>
       <Helmet>
@@ -29,7 +22,7 @@ const PostTemplate = ({ data, pageContext }) => {
       </Helmet>
       <SEO postPath={slug} postNode={postNode} postSEO />
       <Header title={title} />
-      <MainContainer content={content} sidebar={sidebar} />
+      <MainContainer content={content} />
     </Layout>
   );
 };
@@ -46,13 +39,7 @@ export const pageQuery = graphql`
         title
         date
         categories
-        tags
         description
-        cover {
-          childImageSharp {
-            gatsbyImageData(width: 660, quality: 100, layout: FIXED)
-          }
-        }
       }
       fields {
         slug

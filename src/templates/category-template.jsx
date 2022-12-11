@@ -4,20 +4,15 @@ import { graphql } from "gatsby";
 import Layout from "../layout";
 import Header from "../components/Header/Header";
 import MainContainer from "../components/MainContainer/MainContainer";
-import Sidebar from "../components/Sidebar/Sidebar";
 import PostListing from "../components/PostListing/PostListing";
 import {
   getPostList,
-  getCategoryPathWithoutTrailingSlash,
 } from "../utils/helpers";
 import config from "../../data/SiteConfig";
 
 const CategoryTemplate = ({ data, pageContext }) => {
   const {
     category,
-    categoryList,
-    tagList,
-    latestPostEdges,
   } = pageContext;
   const postEdges = data.allMarkdownRemark.edges;
   const postList = getPostList(postEdges);
@@ -25,18 +20,9 @@ const CategoryTemplate = ({ data, pageContext }) => {
     <>
       <PostListing
         postList={postList}
-        hasThumbnail={config.categoryHasThumbnail}
         hasLoadmore={false}
       />
     </>
-  );
-  const sidebar = (
-    <Sidebar
-      tagList={tagList}
-      categoryList={categoryList}
-      latestPostEdges={latestPostEdges}
-      links={config.sidebarLinks}
-    />
   );
 
   return (
@@ -45,8 +31,8 @@ const CategoryTemplate = ({ data, pageContext }) => {
         <Helmet
           title={`${config.categoryHeader} ${category} - ${config.siteTitle}`}
         />
-        <Header title={`${config.categoryHeader} ${category}`} />
-        <MainContainer content={content} sidebar={sidebar} />
+        <Header title={`${config.categoryHeader} - ${category}`} />
+        <MainContainer content={content} />
       </div>
     </Layout>
   );
@@ -79,12 +65,6 @@ export const pageQuery = graphql`
           timeToRead
           frontmatter {
             title
-            tags
-            cover {
-              childImageSharp {
-                gatsbyImageData(width: 660, quality: 100, layout: CONSTRAINED)
-              }
-            }
             date
           }
         }

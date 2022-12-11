@@ -21,7 +21,7 @@ const Utterances = () => {
   }, [])
 
   return (
-    <div className="container pt-8">
+    <div className="container pt-4">
       <div ref={commentsInjectionRoot} />
     </div>
   )

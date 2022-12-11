@@ -6,7 +6,7 @@ const Comment = () => {
   const [isShow, setIsShow] = useState(false);
 
   return (
-    <div className="text-center pt-4">
+    <div className="text-left pt-4">
       {!isShow && (
         <button
           className="btn-primary"

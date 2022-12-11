@@ -32,9 +32,7 @@ export const getCategoryPathWithoutTrailingSlash = (category) => {
 export const getPostList = (postEdges) => {
   return postEdges.map((postEdge) => ({
     path: useSlash(postEdge.node.fields.slug),
-    tags: postEdge.node.frontmatter.tags,
     categories: postEdge.node.frontmatter.categories,
-    cover: postEdge.node.frontmatter.cover,
     title: postEdge.node.frontmatter.title,
     date: postEdge.node.fields.date,
     slug: useSlash(postEdge.node.fields.slug),

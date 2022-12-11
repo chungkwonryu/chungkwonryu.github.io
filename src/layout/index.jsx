@@ -8,7 +8,7 @@ import "../components/Icons/FontAwesome";
 import ScrollToTop from "../components/ScrollToTop/ScrollToTop";
 
 const MainLayout = ({ children, hasFooter = true }) => (
-  <div className="dark:bg-neutral-900 dark:text-gray-200">
+  <div className="dark:bg-neutral-900 dark:text-gray-200 min-h-screen">
     <Helmet htmlAttributes={{ lang: siteConfig.siteLang }}>
       <meta name="description" content={siteConfig.siteDescription} />
       <meta name="google-site-verification" content={siteConfig.googleSearchConsoleContent} />

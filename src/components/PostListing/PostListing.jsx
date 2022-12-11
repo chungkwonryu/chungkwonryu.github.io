@@ -1,10 +1,10 @@
-import React, { useEffect, useState, Component } from "react";
+import React, { useEffect, useState } from "react";
 import Article from "./Article";
 import Button from "../Button/Button";
 import config from "../../../data/SiteConfig";
 
 const PostListing = (props) => {
-  const { postList, hasThumbnail = true } = props;
+  const { postList } = props;
 
   // current max posts to show
   const maxPosts = config.postsPerPage;
@@ -39,8 +39,8 @@ const PostListing = (props) => {
   return (
     <>
       <div>
-        {list.map((post, index) => {
-          return <Article key={post.title} post={post} hasThumbnail={hasThumbnail} />
+        {list.map((post) => {
+          return <Article key={post.title} post={post} />
         })}
       </div>
       {hasMore && (

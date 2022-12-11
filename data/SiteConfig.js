@@ -1,7 +1,7 @@
 const config = {
   // Site info
-  siteTitle: "개발로그", // site title
-  siteTitleShort: "CK Devlog", // short site title for homescreen (under 12 char)
+  siteTitle: "BlahSome", // site title
+  siteTitleShort: "BlahSome", // short site title for homescreen (under 12 char)
   siteTitleAlt: "Chungkwon's Devlog", // Alternative site title for SEO
   siteLogo: "/logos/logo-1024x1024.png", // Logo used for SEO and manifest
   siteUrl: "https://chungkwonryu.github.io", // Domain of you
@@ -88,10 +88,12 @@ const config = {
     },
   ],
   // Use for navigation
-  navTitle: "CK Devlog",
+  navTitle: "BLAHSOME",
   navLinks: [
     { label: "About", url: "/about" },
     { label: "Projects", url: "/projects" },
+    { label: "Archives", url: "/archives" },
+    { label: "Series", url: "/series" },
   ],
   // Use for footer
   socialLinks: [
@@ -133,6 +135,7 @@ const config = {
   backgroundColor: "#FFF", // Used for setting manifest background color.
   // Utterances (comment)
   utteranceRepo: "chungkwonryu/blog-utterances",
+  archivesTitle: "Archives" // archives page 의 title
 };
 
 // Validate

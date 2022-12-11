@@ -1,14 +1,11 @@
 import React from "react";
-import Thumbnail from "./Thumbnail";
 import PostInfo from "./PostInfo";
 
-const Article = ({ post, hasThumbnail }) => {
+const Article = ({ post }) => {
   return (
     <article
-      key={post.title}
-      className="flex flex-col py-12 border-b-2 border-slate-600"
+      className="flex flex-col py-3 border-b-2 border-gray-200"
     >
-      {hasThumbnail && <Thumbnail post={post} />}
       <PostInfo post={post} />
     </article>
   );

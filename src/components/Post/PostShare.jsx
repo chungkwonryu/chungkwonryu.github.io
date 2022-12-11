@@ -13,9 +13,9 @@ import {
 } from "react-share";
 import config from "../../../data/SiteConfig";
 
-const PostShare = ({ postNode, postPath }) => {
-  const post = postNode.frontmatter;
-  const url = config.siteUrl + config.pathPrefix + postPath;
+// Post에 있는 다양한 소셜에 해당 Post를 공유하기 위한 공유 버튼
+const PostShare = ({ title, slug, excerpt }) => {
+  const url = config.siteUrl + config.pathPrefix + slug;
   const iconSize = 26;
   const filter = (count) => (count > 0 ? count : "");
   const renderShareCount = (count) => (
@@ -27,7 +27,7 @@ const PostShare = ({ postNode, postPath }) => {
       <div className="cursor-pointer mr-4">
         <RedditShareButton
           url={url}
-          title={post.title}
+          title={title}
         >
           <RedditIcon round size={iconSize} />
           <RedditShareCount url={url}>
@@ -39,7 +39,7 @@ const PostShare = ({ postNode, postPath }) => {
       <div className="cursor-pointer mr-4">
         <TwitterShareButton
           url={url}
-          title={post.title}
+          title={title}
         >
           <TwitterIcon round size={iconSize} />
         </TwitterShareButton>
@@ -48,7 +48,7 @@ const PostShare = ({ postNode, postPath }) => {
       <div className="cursor-pointer mr-4">
         <FacebookShareButton
           url={url}
-          quote={postNode.excerpt}
+          quote={excerpt}
         >
           <FacebookIcon round size={iconSize} />
           <FacebookShareCount url={url}>
