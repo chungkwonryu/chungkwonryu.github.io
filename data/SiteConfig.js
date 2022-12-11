@@ -95,6 +95,11 @@ const config = {
     { label: "Archives", url: "/archives" },
     { label: "Series", url: "/series" },
   ],
+  seriesList: [
+    { title: "effective-cpp", description: "Effective C++ 전체 책에 대한 정리" }
+  ],
+  seriesHeader: "Series",
+  seriesPerPage: 10,
   // Use for footer
   socialLinks: [
     {

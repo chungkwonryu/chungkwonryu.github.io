@@ -54,9 +54,9 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     //  2. 그 다음은 frontmatter에 title이 있으면 그럴로 slugify
     //    3. 그것도 없으면 파일명 기준
     // 일반 포스트는 /[ ]/
-    // series 포스트는 /[series명]/[ ]/
+    // series 포스트는 /series/[series명]/[ ]/
     if (parsedFilePath.dir !== "") {
-      slug = `/${parsedFilePath.dir}`;
+      slug = `/series/${parsedFilePath.dir}`;
     } else {
       slug = ``;
     }
@@ -233,20 +233,16 @@ exports.createPages = async ({ graphql, actions }) => {
 
   seriesListQueryResult.data.allDirectory.edges.forEach((edge) => {
     const currentSeries = edge.node.name;
-    const seriesPosts = postEdges.filter((postEdge) => {
-      const seriesInPost = postEdge.node.frontmatter.series;
-      return seriesInPost && (currentSeries === seriesInPost);
-    });
 
-    const basePath = `${slugify(currentSeries)}`;
+    const basePath = `/series/${slugify(currentSeries)}/`;
+    const seriesRegex = `/${slugify(currentSeries)}/`;
 
     createPage({
       path: useSlash(basePath),
       component: seriesPageTemplate,
       context: {
         currentSeries,
-        seriesPosts,
-        limit: postsPerPage,
+        seriesRegex,
       },
     });
   });

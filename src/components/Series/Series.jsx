@@ -1,37 +1,19 @@
 import React from "react";
-import { GatsbyImage, getImage } from "gatsby-plugin-image";
-import { Link, graphql, useStaticQuery } from "gatsby";
+import { Link } from "gatsby";
+import { slugify } from "../../utils/helpers";
 
 const Series = ({ series }) => {
-  const defaultImage = useStaticQuery(graphql`
-    query DefaultImageQuery{
-      file(relativePath: { eq: "images/basic-cover-660x400.png" }) {
-        childImageSharp {
-          gatsbyImageData(width: 660, quality: 100, layout: CONSTRAINED)
-        }
-      }
-    }
-  `);
-  const imagePath = series.cover ? series.cover : defaultImage.file;
+  const { title, description } = series;
+  const slug = slugify(title);
   return (
-    <article
-      key={series.title}
-      className="flex-col p-6 border-b-2"
-    >
-      <div className="max-w-full">
-        <Link
-          to={series.slug}
-          key={series.title}
-        >
-          <GatsbyImage
-            image={getImage(imagePath)}
-            alt="series thumbnail image"
-          />
+    <article className="flex flex-col py-3 border-b-2 border-gray-200">
+      <div className="mt-4">
+        <Link to={slug} key={title} >
+          <h2 className="text-3xl font-bold mb-2 text-sky-500 hover:text-sky-700">
+            <small>{title}</small>
+          </h2>
         </Link>
-      </div>
-      <div>
-        <span>{series.title}</span>
-        <small>{series.description}</small>
+        <div className="mb-4">{description}</div>
       </div>
     </article>
   )
