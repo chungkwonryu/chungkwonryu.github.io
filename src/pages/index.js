@@ -3,7 +3,7 @@ import Helmet from "react-helmet";
 import { graphql, Link } from "gatsby";
 import Layout from "../layout";
 import Header from "../components/Header/Header";
-import MainContainer from "../components/MainContainer/MainContainer";
+import MainContainer from "../components/MainContainer/CenterAlignMainContainer";
 import SEO from "../components/SEO/SEO";
 import Search from "../components/Search/Search";
 import config from "../../data/SiteConfig";
@@ -13,8 +13,12 @@ const Index = ({ data }) => {
 
   const content = (
     <div className="flex flex-col justify-center items-center">
-      <img src={welcomeImage.publicURL} alt="welcome image" className="max-w-xl p-2 my-4" />
-      <Search />
+      <div>
+        <img src={welcomeImage.publicURL} alt="welcome image" className="w-full max-w-xl p-2 my-4" />
+      </div>
+      <div className="flex flex-col items-center min-w-fit">
+        <Search />
+      </div>
     </div>
   );
 

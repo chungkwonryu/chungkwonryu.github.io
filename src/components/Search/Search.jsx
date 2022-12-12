@@ -30,16 +30,16 @@ const Search = () => {
   }, [fusejs, query])
 
   return (
-    <div className="m-4 flex flex-col justify-center items-center w-full">
+    <div className="p-4 m-4 flex flex-col justify-center items-center w-4/6 min-w-fit max-w-lg">
       <input
         type="search"
-        className="form-control block w-full max-w-lg px-3 py-1.5 text-base font-normal bg-white dark:bg-neutral-900 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-2 focus:border-sky-400 focus:outline-none"
+        className="form-control block min-w-full w-5/6 max-w-lg px-3 py-1.5 text-base font-normal bg-white dark:bg-neutral-900 autofill:bg-neutral-800 bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-2 focus:border-sky-400 focus:outline-none"
         id="post-search"
         placeholder="Search..."
         value={query}
         onChange={e => setQuery(e.target.value)}
       />
-      <div className="flex flex-col mb-3 max-w-4xl justify-center items-center">
+      <div className="flex flex-col items-start mb-3 w-full max-w-4xl justify-center">
         {result.map(({ item }) => (
           <article
             key={item.id}

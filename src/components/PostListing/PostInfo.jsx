@@ -11,7 +11,9 @@ const PostInfo = ({ post }) => {
           <small>{title}</small>
         </h2>
       </Link>
-      <div className="mb-4">{excerpt}</div>
+      <div className="mb-4">
+        {excerpt}
+      </div>
       <small>
         <PostDate date={date} />
       </small>
