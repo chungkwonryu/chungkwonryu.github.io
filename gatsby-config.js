@@ -71,7 +71,7 @@ module.exports = {
             options: {
               maxWidth: 660,
               quality: 100,
-              path: `${__dirname}/content/images`,
+              //path: `${__dirname}/content/images`,
             },
           },
           {
